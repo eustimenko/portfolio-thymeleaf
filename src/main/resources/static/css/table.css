@@ -1,0 +1,42 @@
+.wrap {
+    padding: 10px;
+    width: 50%;
+}
+
+.wrap label {
+    font-size: 0.9em;
+}
+
+.wrap label.addLabel {
+    font-style: italic;
+}
+
+.wrap .control-label {
+    text-align: left;
+}
+
+.wrap div.addForm.form-horizontal .control-label {
+    text-align: left;
+}
+
+.wrap div .formButton {
+    width: 100%;
+}
+
+.wrap .searchBlock h2 {
+    text-align: center;
+}
+
+.wrap .searchBlock .searchInput {
+    margin-bottom: 20px;
+}
+
+.wrap .searchBlock .searchInput label {
+    padding-top: 7px;
+}
+
+.wrap .searchBlock table.table thead th {
+    text-align: center;
+}
+
+
