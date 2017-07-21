@@ -3,7 +3,7 @@
 ## Pre-build
 Execute from `mysql` command-line the following commands:
 
- - `create database thymeleaf;`
+ - `create database thymeleaf DEFAULT CHARACTER SET utf8;`
  - `grant all privileges on thymeleaf.* to 'thymeleaf'@'localhost' identified by "thymeleaf";`
  
 ## Build, tests, running

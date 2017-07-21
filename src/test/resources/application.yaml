@@ -1,7 +1,4 @@
-#Disbale Spring banner
 spring:
-  main:
-    banner-mode: off
 # H2
   h2:
     console:
@@ -20,4 +17,4 @@ liquibase:
   url: jdbc:hsqldb:mem:thymeleaf
   user: sa
   password:
-  contexts: production
+  contexts: hsqldb

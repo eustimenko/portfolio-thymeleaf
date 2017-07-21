@@ -4,59 +4,51 @@ import com.eustimenko.portfolio.thymeleaf.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Repository
-@Transactional
 public class DefaultUserDao implements UserDao {
 
     private final JdbcTemplate jdbc;
+    private RowMapper<User> mapper;
 
     @Autowired
     public DefaultUserDao(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    @PostConstruct
+    public void initNonChangedFields() {
+        mapper = new BeanPropertyRowMapper<>(User.class);
+    }
+
     public Long insertUser(String name) {
-        final SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbc)
-                .withTableName("users")
-                .usingGeneratedKeyColumns("id");
-
-        final Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", name);
-
-        final Number key = insert.executeAndReturnKey(new MapSqlParameterSource(
-                parameters));
-
-        return key.longValue();
+        jdbc.update(UserQueries.INSERT_USER, name);
+        return jdbc.queryForObject(UserQueries.SELECT_LAST_INSERT_ID, Long.class);
     }
 
     public List<User> findByName(String name) throws DataAccessException {
-        String sql = "SELECT id, name FROM users";
-        if (!name.isEmpty()) {
-            sql += " WHERE LOWER(name) LIKE LOWER(?) ORDER BY name";
-
-            return jdbc.query(sql, getRowMapper(), "%" + name + "%");
-        } else {
-            sql += " ORDER BY id";
-            return jdbc.query(sql, getRowMapper());
-        }
-    }
-
-    private RowMapper<User> getRowMapper() {
-        return (rs, rowNum) -> new User(rs.getLong("id"), rs.getString("name"));
+        return name.isEmpty()
+                ? jdbc.query(UserQueries.SELECT_USERS_ORDERED_BY_ID, mapper)
+                : jdbc.query(UserQueries.SELECT_USERS_BY_NAME_ORDERED_BY_NAME, mapper, "%" + name + "%");
     }
 
     public User findById(long id) throws DataAccessException {
-        return jdbc.queryForObject("SELECT id, name FROM users WHERE id=?", getRowMapper(), id);
+        return jdbc.queryForObject(UserQueries.SELECT_USERS_BY_ID, mapper, id);
     }
 
     public List<User> findAll() throws DataAccessException {
         return findByName("");
+    }
+
+    private interface UserQueries {
+        String SELECT_USERS_BY_ID = "SELECT id, name FROM users WHERE id=?";
+        String SELECT_USERS_ORDERED_BY_ID = "SELECT id, name FROM users ORDER BY id";
+        String SELECT_USERS_BY_NAME_ORDERED_BY_NAME = "SELECT id, name FROM users WHERE name LIKE ? ORDER BY name";
+        String INSERT_USER = "INSERT INTO users(name) VALUES(?)";
+        String SELECT_LAST_INSERT_ID = "SELECT LAST_INSERT_ID()";
     }
 }

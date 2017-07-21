@@ -1,7 +1,4 @@
-#Disbale Spring banner
 spring:
-  main:
-    banner-mode: off
 #Datasource configuration
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -19,4 +16,4 @@ liquibase:
   url: jdbc:mysql://localhost:3306/thymeleaf?useSSL=false
   user: thymeleaf
   password: thymeleaf
-  contexts: production
+  contexts: mysql

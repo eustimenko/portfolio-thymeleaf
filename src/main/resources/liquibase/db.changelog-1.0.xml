@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet id="20170608-1" author="ustimenko" context="production">
+    <changeSet id="20170608-1" author="ustimenko" context="mysql, hsqldb">
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
                 <constraints nullable="false" primaryKey="true"/>
@@ -22,5 +22,22 @@
         <rollback>
             <dropTable tableName="users" cascadeConstraints="true"/>
         </rollback>
+    </changeSet>
+
+    <changeSet id="20170721-1" author="ustimenko" context="mysql">
+        <modifyDataType tableName="users"
+                        columnName="name"
+                        newDataType="VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci"/>
+
+        <rollback>
+            <modifyDataType tableName="users" columnName="name" newDataType="VARCHAR(255)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="20170721-2" author="ustimenko" context="hsqldb">
+        <sql>
+            SET DATABASE SQL SYNTAX MYS TRUE;
+            SET DATABASE COLLATION SQL_TEXT_UCC
+        </sql>
     </changeSet>
 </databaseChangeLog>

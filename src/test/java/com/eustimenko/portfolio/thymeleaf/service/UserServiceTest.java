@@ -1,6 +1,6 @@
 package com.eustimenko.portfolio.thymeleaf.service;
 
-import com.eustimenko.portfolio.thymeleaf.exception.DataAccessException;
+import com.eustimenko.portfolio.thymeleaf.exception.DaoException;
 import com.eustimenko.portfolio.thymeleaf.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +30,9 @@ public class UserServiceTest {
         assertEquals(expected.getName(), result.getName());
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = DaoException.class)
     public void addUserWithError() {
-        when(service.addUser("User")).thenThrow(new DataAccessException(new RuntimeException()));
+        when(service.addUser("User")).thenThrow(new DaoException(new RuntimeException()));
 
         service.addUser("User");
     }
@@ -46,9 +46,9 @@ public class UserServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = DaoException.class)
     public void listWithError() {
-        when(service.list()).thenThrow(new DataAccessException(new RuntimeException()));
+        when(service.list()).thenThrow(new DaoException(new RuntimeException()));
 
         service.list();
     }
@@ -62,9 +62,9 @@ public class UserServiceTest {
         assertTrue(result.size() == 1);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = DaoException.class)
     public void listByNameWithError() {
-        when(service.list("Eugene")).thenThrow(new DataAccessException(new RuntimeException()));
+        when(service.list("Eugene")).thenThrow(new DaoException(new RuntimeException()));
 
         service.list("Eugene");
     }

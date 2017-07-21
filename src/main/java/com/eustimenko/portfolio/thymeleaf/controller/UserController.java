@@ -1,5 +1,6 @@
 package com.eustimenko.portfolio.thymeleaf.controller;
 
+import com.eustimenko.portfolio.thymeleaf.exception.DaoException;
 import com.eustimenko.portfolio.thymeleaf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,14 +18,14 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String users(Model model) {
+    public String users(Model model) throws DaoException {
         model.addAttribute(ModelParameters.USERS, service.list());
 
         return "index";
     }
 
     @GetMapping("/get")
-    public String users(@RequestParam(value = "name", required = false, defaultValue = "") String name, Model model) {
+    public String users(@RequestParam(value = "name", required = false, defaultValue = "") String name, Model model) throws DaoException {
         if (name.isEmpty()) {
             model.addAttribute(ModelParameters.USERS, service.list());
         } else {
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/new")
-    public String createUser(@RequestParam(value = "name") String name, Model model) {
+    public String createUser(@RequestParam(value = "name") String name, Model model) throws DaoException {
         service.addUser(name);
         model.addAttribute(ModelParameters.USERS, service.list());
 
