@@ -49,17 +49,21 @@ public class UserDaoTest {
 
     @Test
     public void insertUser() {
-        final String newUserName = "User inserted from test";
-        final Long result = dao.insertUser(newUserName);
+        final int preInsertSize = dao.findAll().size();
 
-        assertNotNull(result);
-        assertFalse(result == 0);
+        final String newUserName = "User inserted from test";
+        dao.insertUser(newUserName);
+
+        final int postInsertSize = dao.findAll().size();
+        assertTrue((postInsertSize - preInsertSize) == 1);
     }
 
     @Test
     public void findByIdSuccessfully() {
+        final Long newUserId = 1L;
         final String newUserName = "User to find by id";
-        final Long newUserId = dao.insertUser(newUserName);
+
+        jdbc.update("INSERT INTO users(id, name) VALUES (?, ?)", newUserId, newUserName);
 
         final User result = dao.findById(newUserId);
 
@@ -69,8 +73,11 @@ public class UserDaoTest {
 
     @Test(expected = DataAccessException.class)
     public void findByIdWithError() {
+        Long newUserId = 1L;
         final String newUserName = "User to find by id with error";
-        Long newUserId = dao.insertUser(newUserName);
+
+        jdbc.update("INSERT INTO users(id, name) VALUES (?, ?)", newUserId, newUserName);
+
         dao.findById(++newUserId);
     }
 

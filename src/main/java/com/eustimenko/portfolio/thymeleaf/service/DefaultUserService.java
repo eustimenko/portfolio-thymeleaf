@@ -23,20 +23,17 @@ public class DefaultUserService implements UserService {
         this.dao = dao;
     }
 
-    public User addUser(String name) {
+    public void addUser(String name) {
         try {
-            return insertAndGetUser(name);
+            insertAndGetUser(name);
         } catch (Exception e) {
             throw new DaoException(e);
         }
     }
 
-    private User insertAndGetUser(String name) {
-        final long insertedUserId = dao.insertUser(name);
-        final User user = dao.findById(insertedUserId);
-
-        logger.info("User {} is created", user.toString());
-        return user;
+    private void insertAndGetUser(String name) {
+        dao.insertUser(name);
+        logger.info("User {} is created", name);
     }
 
     public List<User> list() {

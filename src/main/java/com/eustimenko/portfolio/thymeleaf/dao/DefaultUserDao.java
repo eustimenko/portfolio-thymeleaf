@@ -25,9 +25,8 @@ public class DefaultUserDao implements UserDao {
         mapper = new BeanPropertyRowMapper<>(User.class);
     }
 
-    public Long insertUser(String name) {
+    public void insertUser(String name) {
         jdbc.update(UserQueries.INSERT_USER, name);
-        return jdbc.queryForObject(UserQueries.SELECT_LAST_INSERT_ID, Long.class);
     }
 
     public List<User> findByName(String name) throws DataAccessException {
@@ -49,6 +48,5 @@ public class DefaultUserDao implements UserDao {
         String SELECT_USERS_ORDERED_BY_ID = "SELECT id, name FROM users ORDER BY id";
         String SELECT_USERS_BY_NAME_ORDERED_BY_NAME = "SELECT id, name FROM users WHERE name LIKE ? ORDER BY name";
         String INSERT_USER = "INSERT INTO users(name) VALUES(?)";
-        String SELECT_LAST_INSERT_ID = "SELECT LAST_INSERT_ID()";
     }
 }

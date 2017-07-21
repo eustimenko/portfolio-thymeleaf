@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    Long insertUser(String name);
+    void insertUser(String name);
 
     List<User> findByName(String name) throws DataAccessException;
 
