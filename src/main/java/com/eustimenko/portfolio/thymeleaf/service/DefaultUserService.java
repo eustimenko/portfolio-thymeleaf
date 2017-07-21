@@ -25,15 +25,15 @@ public class DefaultUserService implements UserService {
 
     public void addUser(String name) {
         try {
-            insertAndGetUser(name);
+            insertUser(name);
         } catch (Exception e) {
             throw new DaoException(e);
         }
     }
 
-    private void insertAndGetUser(String name) {
+    private void insertUser(String name) {
         dao.insertUser(name);
-        logger.info("User '{}' is inserted", name);
+        logger.debug("User '{}' is inserted", name);
     }
 
     public List<User> list() {
