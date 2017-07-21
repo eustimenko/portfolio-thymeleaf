@@ -26,11 +26,7 @@ public class UserController {
 
     @GetMapping("/get")
     public String users(@RequestParam(value = "name", required = false, defaultValue = "") String name, Model model) throws DaoException {
-        if (name.isEmpty()) {
-            model.addAttribute(ModelParameters.USERS, service.list());
-        } else {
-            model.addAttribute(ModelParameters.USERS, service.list(name));
-        }
+        model.addAttribute(ModelParameters.USERS, name.isEmpty() ? service.list() : service.list(name));
 
         return "index :: users";
     }

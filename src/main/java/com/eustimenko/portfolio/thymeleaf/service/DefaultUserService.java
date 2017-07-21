@@ -33,7 +33,7 @@ public class DefaultUserService implements UserService {
 
     private void insertAndGetUser(String name) {
         dao.insertUser(name);
-        logger.info("User {} is created", name);
+        logger.info("User '{}' is inserted", name);
     }
 
     public List<User> list() {
