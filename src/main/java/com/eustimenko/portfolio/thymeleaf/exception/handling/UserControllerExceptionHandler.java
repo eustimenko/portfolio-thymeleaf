@@ -10,7 +10,7 @@ public class UserControllerExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(UserControllerExceptionHandler.class);
 
     @ExceptionHandler(DaoException.class)
-    public String handleDataAccessException(DaoException e) {
+    public String handleDaoException(DaoException e) {
         logger.error("{}", e.getMessage());
         return "error";
     }
